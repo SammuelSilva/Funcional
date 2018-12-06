@@ -11,20 +11,28 @@ initialMemory = []
 
 -- validacao da expressao
 eval :: Memory -> Expr -> Double
-eval _ (Cte x) = x
+eval _ (Cte x)  = x
 eval m (Var v) =
   case lookup v m of
     Just x -> x
     Nothing -> 0
+
 eval m (Bin op x y) =
   case op of
-    Add -> vx + vy
-    Sub -> vx - vy
-    Mul -> vx * vy
-    Div -> vx / vy
+    Add   -> vx + vy
+    Sub   -> vx - vy
+    Mul   -> vx * vy
+    Div   -> vx / vy
+    Power -> vx ** vy
   where
     vx = eval m x
     vy = eval m y
+
+eval m (BinR op x) =
+  case op of
+    Csign -> (-1)*vx
+  where
+    vx = eval m x 
 
 -- Comando para realizar a execucao
 execute :: Memory -> Cmd -> IO Memory
